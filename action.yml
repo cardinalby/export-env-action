@@ -24,5 +24,5 @@ runs:
         EXPAND: ${{ inputs.expand }}
         EXPORT: ${{ inputs.export }}
       with:
-        jsFile: ${{ github.action_path }}/index.js
+        jsFile: ${{ github.action_path }}index.js
         extractOutputs: 'true'
