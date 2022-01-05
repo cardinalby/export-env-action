@@ -20,9 +20,6 @@ jobs:
           export: 'false'
 
       - name: Check noExport result
-        if: |
-          env.AAA != '' || 
-          env.BBB != '' ||
           steps.noExport.outputs.AAA != 'aaa#a' ||
           steps.noExport.outputs.BBB != 'val-${AAA}-lav'
         run: exit 1
