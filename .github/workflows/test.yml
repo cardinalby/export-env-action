@@ -21,6 +21,8 @@ jobs:
 
       - name: Check noExport result
         if: |
+          steps.noExport.outputs.AAA != 'aaa#a' ||
+          steps.noExport.outputs.BBB != 'val-${AAA}-lav' ||
           env.AAA != '' || 
           env.BBB != ''
         run: >
@@ -65,12 +67,17 @@ jobs:
           expand: 'true'
 
       - name: Check noExport result
-        if: |
+        if: |          
           env.AAA != '' || 
           env.BBB != '' ||
           steps.noExport.outputs.AAA != 'aaa#a' ||
           steps.noExport.outputs.BBB != 'val-aaa#a-lav'
-        run: exit 1
+        run: >
+          echo "env.AAA: '${{env.AAA}}'" && 
+          echo "env.BBB: '${{env.BBB}}'" &&
+          echo "steps.noExport.outputs.AAA: '${{steps.noExport.outputs.AAA}}'" &&
+          echo "steps.noExport.outputs.BBB: '${{steps.noExport.outputs.BBB}}'" &&
+          exit 1
 
       - name: Expand
         uses: ./
