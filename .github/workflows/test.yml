@@ -23,8 +23,8 @@ jobs:
         if: |
           env.AAA != '' || 
           env.BBB != '' ||
-          steps.outputs.AAA != 'aaa#a' ||
-          steps.outputs.BBB != 'val-${AAA}-lav'
+          steps.noExport.outputs.AAA != 'aaa#a' ||
+          steps.noExport.outputs.BBB != 'val-${AAA}-lav'
         run: exit 1
 
       - name: Do not expand
@@ -65,8 +65,8 @@ jobs:
         if: |
           env.AAA != '' || 
           env.BBB != '' ||
-          steps.outputs.AAA != 'aaa#a' ||
-          steps.outputs.BBB != 'val-aaa#a-lav'
+          steps.noExport.outputs.AAA != 'aaa#a' ||
+          steps.noExport.outputs.BBB != 'val-aaa#a-lav'
         run: exit 1
 
       - name: Expand
