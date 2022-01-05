@@ -8,13 +8,13 @@ inputs:
   expand:
     description: 'Substitute ${VAR} references by values of correspondent vars'
     required: false
-    default: 'false',
+    default: 'false'
   export:
     description: |
       Export variables to a job environment. If `false`, all variables will be set as an action 
       outputs instead.
     required: false
-    default: 'true',
+    default: 'true'
 runs:
   using: "composite"
   steps:
@@ -24,5 +24,5 @@ runs:
         EXPAND: ${{ inputs.expand }}
         EXPORT: ${{ inputs.export }}
       with:
-        jsFile: 'index.js'
+        jsFile: ${{ github.action_path }}/index.js
         extractOutputs: 'true'
