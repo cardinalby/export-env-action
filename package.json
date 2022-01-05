@@ -1,0 +1,6 @@
+{
+  "name": "export-env-action",
+  "devDependencies": {
+    "js-eval-action-expression-context": "^0.0.2"
+  }
+}

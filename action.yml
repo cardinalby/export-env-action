@@ -1,0 +1,20 @@
+name: 'export-env-action'
+description: 'Exports .env file variables to job env'
+author: 'cardinalby'
+inputs:
+  envFile:
+    description: 'Path to .env file'
+    required: true
+  expand:
+    description: 'Substitute ${VAR} references by values of correspondent vars'
+    required: false
+    default: true,
+runs:
+  using: "composite"
+  steps:
+    - uses: cardinalby/js-eval-action@testPkg
+      env:
+        ENV_FILE: ${{ inputs.envFile }}
+        EXPAND: ${{ inputs.expand }}
+      with:
+        jsFile: 'index.js'
