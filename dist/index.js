@@ -6,6 +6,25 @@
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,11 +34,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(186));
+const core = __importStar(__nccwpck_require__(186));
 const main_1 = __nccwpck_require__(109);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -27,7 +43,7 @@ function run() {
             yield (0, main_1.runImpl)();
         }
         catch (error) {
-            core_1.default.setFailed(String(error));
+            core.setFailed(String(error));
         }
     });
 }
@@ -42,20 +58,36 @@ run();
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(186));
+const core = __importStar(__nccwpck_require__(186));
 exports["default"] = {
     get envFile() {
-        return core_1.default.getInput('envFile', { required: true });
+        return core.getInput('envFile', { required: true });
     },
     get expand() {
-        return core_1.default.getBooleanInput('expand');
+        return core.getBooleanInput('expand');
     },
     get export() {
-        return core_1.default.getBooleanInput('export');
+        return core.getBooleanInput('export');
     }
 };
 //# sourceMappingURL=inputs.js.map
@@ -92,19 +124,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.runImpl = void 0;
 const fs = __importStar(__nccwpck_require__(147));
-const dotenv_1 = __importDefault(__nccwpck_require__(437));
+const dotenv = __importStar(__nccwpck_require__(437));
 const dotenv_expand_1 = __importDefault(__nccwpck_require__(967));
 const inputs_1 = __importDefault(__nccwpck_require__(180));
-const core_1 = __importDefault(__nccwpck_require__(186));
+const core = __importStar(__nccwpck_require__(186));
 function runImpl() {
-    let vars = dotenv_1.default.parse(fs.readFileSync(inputs_1.default.envFile));
+    let vars = dotenv.parse(fs.readFileSync(inputs_1.default.envFile));
     if (inputs_1.default.expand) {
         // @ts-ignore
         vars = (0, dotenv_expand_1.default)({ parsed: vars, ignoreProcessEnv: true }).parsed;
     }
     const applyResultFunc = inputs_1.default.export
-        ? core_1.default.exportVariable
-        : core_1.default.setOutput;
+        ? core.exportVariable
+        : core.setOutput;
     Object.entries(vars).forEach(e => applyResultFunc(e[0], e[1]));
 }
 exports.runImpl = runImpl;

@@ -1,8 +1,8 @@
 import * as fs from "fs";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
 import inputs from "./inputs";
-import core from "@actions/core";
+import * as core from "@actions/core";
 
 export function runImpl() {
     let vars = dotenv.parse(fs.readFileSync(inputs.envFile));
