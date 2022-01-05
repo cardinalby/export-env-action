@@ -23,6 +23,7 @@ jobs:
         if: |
           steps.noExport.outputs.AAA != 'aaa#a' ||
           steps.noExport.outputs.BBB != 'val-${AAA}-lav' ||
+          steps.noExport.outputs.CCC != '${JOBENV}' ||
           env.AAA != '' || 
           env.BBB != ''
         run: >
@@ -30,6 +31,7 @@ jobs:
           echo "env.BBB: '${{env.BBB}}'" &&
           echo "steps.noExport.outputs.AAA: '${{steps.noExport.outputs.AAA}}'" &&
           echo "steps.noExport.outputs.BBB: '${{steps.noExport.outputs.BBB}}'" &&
+          echo "steps.noExport.outputs.CCC: '${{steps.noExport.outputs.CCC}}'" &&
           exit 1
 
       - name: Do not expand
@@ -61,6 +63,8 @@ jobs:
       - name: Do not export
         id: noExport
         uses: ./
+        env:
+          JOBENV: xxx
         with:
           envFile: '.github/workflows/test/case1.env'
           export: 'false'
@@ -71,12 +75,14 @@ jobs:
           env.AAA != '' || 
           env.BBB != '' ||
           steps.noExport.outputs.AAA != 'aaa#a' ||
-          steps.noExport.outputs.BBB != 'val-aaa#a-lav'
+          steps.noExport.outputs.BBB != 'val-aaa#a-lav' ||
+          steps.noExport.outputs.CCC != ''
         run: >
           echo "env.AAA: '${{env.AAA}}'" && 
           echo "env.BBB: '${{env.BBB}}'" &&
           echo "steps.noExport.outputs.AAA: '${{steps.noExport.outputs.AAA}}'" &&
           echo "steps.noExport.outputs.BBB: '${{steps.noExport.outputs.BBB}}'" &&
+          echo "steps.noExport.outputs.CCC: '${{steps.noExport.outputs.CCC}}'" &&
           exit 1
 
       - name: Expand

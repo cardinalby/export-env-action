@@ -16,13 +16,5 @@ inputs:
     required: false
     default: 'true'
 runs:
-  using: "composite"
-  steps:
-    - uses: cardinalby/js-eval-action@testPkg
-      env:
-        ENV_FILE: ${{ inputs.envFile }}
-        EXPAND: ${{ inputs.expand }}
-        EXPORT: ${{ inputs.export }}
-      with:
-        jsFile: ${{ github.action_path }}index.js
-        extractOutputs: 'true'
+  using: 'node16'
+  main: 'dist/index.js'
