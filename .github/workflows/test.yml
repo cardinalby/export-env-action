@@ -7,10 +7,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  doNotExpandTest:
+  doNotExpand:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Do not export
+        id: noExport
+        uses: ./
+        with:
+          envFile: '.github/workflows/test/case1.env'
+          export: 'false'
+
+      - name: Check noExport result
+        if: |
+          env.AAA != '' || 
+          env.BBB != '' ||
+          steps.output.AAA != 'aaa#a' ||
+          steps.output.BBB != 'val-${AAA}-lav'
+        run: exit 1
 
       - name: Do not expand
         uses: ./
@@ -19,7 +34,7 @@ jobs:
           expand: 'false'
 
       - name: Check noExpand result
-        if: env.AAA != 'aaaa' || env.BBB != 'val-${AAA}-lav'
+        if: env.AAA != 'aaa#a' || env.BBB != 'val-${AAA}-lav'
         run: exit 1
 
       - name: Load not exisitng
@@ -38,6 +53,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Do not export
+        id: noExport
+        uses: ./
+        with:
+          envFile: '.github/workflows/test/case1.env'
+          export: 'false'
+          expand: 'true'
+
+      - name: Check noExport result
+        if: |
+          env.AAA != '' || 
+          env.BBB != '' ||
+          steps.output.AAA != 'aaa#a' ||
+          steps.output.BBB != 'val-aaa#a-lav'
+        run: exit 1
+
       - name: Expand
         uses: ./
         with:
@@ -45,5 +76,18 @@ jobs:
           expand: 'true'
 
       - name: Check expand result
-        if: env.AAA != 'aaaa' || env.BBB != 'val-aaaa-lav'
+        if: env.AAA != 'aaa#a' || env.BBB != 'val-aaa#a-lav'
+        run: exit 1
+  jsonTest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: JSON test
+        uses: ./
+        with:
+          envFile: '.github/workflows/test/case2.env'
+
+      - name: Check JSON result
+        if: env.json != ''
         run: exit 1
