@@ -44,7 +44,7 @@ jobs:
         if: env.AAA != 'aaa#a' || env.BBB != 'val-${AAA}-lav'
         run: exit 1
 
-      - name: Load not exisitng
+      - name: Load not existing
         id: nonExisting
         uses: ./
         continue-on-error: true
