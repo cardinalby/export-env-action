@@ -94,6 +94,9 @@ exports["default"] = {
     get expand() {
         return core.getBooleanInput('expand');
     },
+    get expandWithJobEnv() {
+        return core.getBooleanInput('expandWithJobEnv');
+    },
     get export() {
         return core.getBooleanInput('export');
     }
@@ -142,9 +145,9 @@ const inputs_1 = __importDefault(__nccwpck_require__(180));
 const core = __importStar(__nccwpck_require__(186));
 function runImpl() {
     let vars = dotenv.parse(fs.readFileSync(inputs_1.default.envFile));
-    if (inputs_1.default.expand) {
+    if (inputs_1.default.expand || inputs_1.default.expandWithJobEnv) {
         // @ts-ignore
-        vars = (0, dotenv_expand_1.default)({ parsed: vars, ignoreProcessEnv: true }).parsed;
+        vars = (0, dotenv_expand_1.default)({ parsed: vars, ignoreProcessEnv: !inputs_1.default.expandWithJobEnv }).parsed;
     }
     const applyResultFunc = inputs_1.default.export
         ? core.exportVariable
