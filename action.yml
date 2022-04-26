@@ -9,6 +9,10 @@ inputs:
     description: 'Substitute ${VAR} references by values of correspondent vars'
     required: false
     default: 'false'
+  expandWithJobEnv:
+    description: 'Use step env for expanding ${VAR} references'
+    required: false
+    default: 'false'
   export:
     description: |
       Export variables to a job environment. If `false`, all variables will be set as an action 

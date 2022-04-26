@@ -9,6 +9,10 @@ export default {
         return core.getBooleanInput('expand');
     },
 
+    get expandWithJobEnv(): boolean {
+        return core.getBooleanInput('expandWithJobEnv');
+    },
+
     get export(): boolean {
         return core.getBooleanInput('export');
     }

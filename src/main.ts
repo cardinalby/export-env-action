@@ -6,9 +6,9 @@ import * as core from "@actions/core";
 
 export function runImpl() {
     let vars = dotenv.parse(fs.readFileSync(inputs.envFile));
-    if (inputs.expand) {
+    if (inputs.expand || inputs.expandWithJobEnv) {
         // @ts-ignore
-        vars = dotenvExpand({parsed: vars, ignoreProcessEnv: true}).parsed;
+        vars = dotenvExpand({parsed: vars, ignoreProcessEnv: !inputs.expandWithJobEnv}).parsed;
     }
     const applyResultFunc = inputs.export
         ? core.exportVariable

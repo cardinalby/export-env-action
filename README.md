@@ -72,14 +72,18 @@ VAR2=def
 
 ## Inputs
 
-### `envFile` **Required**
+### 🔸 `envFile` **Required**
 Path to env file to parse
 
-### `expand` Default: `false`
+### 🔸 `expand` Default: `false`
 "Expands" variables if equals `true`. It means, `${ANOTHER}` in variable value will be 
-substituted by the value of `ANOTHER` variable (defined in the same env file).
+substituted by the value of `ANOTHER` variable (defined in the same env file). 
 
-### `export` Default: `true`
+### 🔸 `expandWithJobEnv` Default: `false`
+"Expands" variables considering step (job) env variables if equals `true` (in addition to variables defined in the same env file). 
+It means, `${GITHUB_RUN_ATTEMPT}` in variable value will be substituted by the value of `$GITHUB_RUN_ATTEMPT` job env variable. 
+
+### 🔸 `export` Default: `true`
 Export variables to a job environment. If `false`, all variables will be set as an action 
 outputs instead.
 
