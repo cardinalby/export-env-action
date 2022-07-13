@@ -118,7 +118,7 @@ describe('export-env-action', () => {
     it('should not parse json', async () => {
         const res = await target.run(RunOptions.create({
             inputs: {
-                envFile: path.join(__dirname, 'case2.env'),
+                envFile: path.join(__dirname, 'invalid.env'),
             }
         }));
         expect(res.isSuccess).toEqual(true);

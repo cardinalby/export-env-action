@@ -9,7 +9,7 @@ multiple workflows.
 
 ### Simple case:
 
-```env
+```dotenv
 # constants.env file
 
 VAR1=abc
@@ -17,7 +17,7 @@ VAR2=def
 ```
 
 ```yaml
-- uses: cardinalby/export-env-action@v1
+- uses: cardinalby/export-env-action@v2
   with:
     envFile: 'constants.env'    
   
@@ -27,7 +27,7 @@ VAR2=def
 
 ### Expand variables
 
-```env
+```dotenv
 # constants.env file
 
 PROTOCOL=https
@@ -37,7 +37,7 @@ URI=${PROTOCOL}://${HOST}:${PORT}
 ```
 
 ```yaml
-- uses: cardinalby/export-env-action@v1
+- uses: cardinalby/export-env-action@v2
   with:
     envFile: 'constants.env'    
     expand: 'true'
@@ -50,7 +50,7 @@ URI=${PROTOCOL}://${HOST}:${PORT}
 
 ### Do not export:
 
-```env
+```dotenv
 # constants.env file
 
 VAR1=abc
@@ -58,7 +58,7 @@ VAR2=def
 ```
 
 ```yaml
-- uses: cardinalby/export-env-action@v1
+- uses: cardinalby/export-env-action@v2
   id: exportStep
   with:
     envFile: 'constants.env'
@@ -72,21 +72,25 @@ VAR2=def
 
 ## Inputs
 
-### 🔸 `envFile` **Required**
-Path to env file to parse
+### 🔸 `envFile` Required
+Path to env file to parse. 
 
-### 🔸 `expand` Default: `false`
-"Expands" variables if equals `true`. It means, `${ANOTHER}` in variable value will be 
-substituted by the value of `ANOTHER` variable (defined in the same env file). 
+### 🔹 `expand` Default: `false`
+If `true`, "expands" variables:
+```dotenv
+VAR_1=aaa
+VAR_2=${VAR_1}_bbb
+```
+Will lead to following exported variables: `VAR1 = aaa`, `VAR2 = aaa_bbb`.
 
-### 🔸 `expandWithJobEnv` Default: `false`
-"Expands" variables considering step (job) env variables if equals `true` (in addition to variables defined in the same env file). 
-It means, `${GITHUB_RUN_ATTEMPT}` in variable value will be substituted by the value of `$GITHUB_RUN_ATTEMPT` job env variable. 
+### 🔹 `expandWithJobEnv` Default: `false`
+If `true`, "expands" variables considering step (job) env variables (in addition to variables defined in the same env file). 
+It means, `${GITHUB_RUN_ATTEMPT}` in a variable value will be substituted by the value of `$GITHUB_RUN_ATTEMPT` job env variable.
 
-### 🔸 `export` Default: `true`
+### 🔹 `export` Default: `true`
 Export variables to a job environment. If `false`, all variables will be set as an action 
 outputs instead.
 
 ## Outputs
 
-If `export` is `false` then has an individual output for each variable from env file.
+If `export` is `false` then has an individual output for each variable from env file (where output name equals variable name).
