@@ -7,6 +7,15 @@ on:
   workflow_dispatch:
 
 jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Test
+        run: npm run test
   doNotExpand:
     runs-on: ubuntu-latest
     steps:

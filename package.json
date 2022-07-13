@@ -3,7 +3,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "pack": "ncc build"
+    "pack": "ncc build",
+    "test": "jest tests"
   },
   "author": "cardinalby",
   "license": "MIT",
