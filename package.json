@@ -4,7 +4,8 @@
   "scripts": {
     "build": "tsc",
     "pack": "ncc build",
-    "test": "jest tests"
+    "test": "jest tests",
+    "mergeToV2AndPush": "git fetch . master:v2 && git push origin v2"
   },
   "author": "cardinalby",
   "license": "MIT",
