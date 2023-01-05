@@ -19,6 +19,10 @@ inputs:
       outputs instead.
     required: false
     default: 'true'
+  mask:
+    description: 'Mask all result values (after expanding) as secrets'
+    required: false
+    default: 'false'
 runs:
   using: 'node16'
   main: 'dist/index.js'

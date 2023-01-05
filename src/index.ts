@@ -3,11 +3,11 @@ import {runImpl} from "./main";
 
 async function run(): Promise<void> {
     try {
-        await runImpl();
+        await runImpl()
     } catch (error) {
-        core.setFailed(String(error));
+        core.setFailed(String(error))
     }
 }
 
 // noinspection JSIgnoredPromiseFromCall
-run();
+run()

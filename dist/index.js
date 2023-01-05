@@ -99,6 +99,9 @@ exports["default"] = {
     },
     get export() {
         return core.getBooleanInput('export');
+    },
+    get mask() {
+        return core.getBooleanInput('mask');
     }
 };
 //# sourceMappingURL=inputs.js.map
@@ -143,16 +146,24 @@ const dotenv = __importStar(__nccwpck_require__(437));
 const dotenvExpand = __importStar(__nccwpck_require__(967));
 const inputs_1 = __importDefault(__nccwpck_require__(180));
 const core = __importStar(__nccwpck_require__(186));
+function processValue(name, value) {
+    if (inputs_1.default.mask) {
+        core.setSecret(value);
+    }
+    if (inputs_1.default.export) {
+        core.exportVariable(name, value);
+    }
+    else {
+        core.setOutput(name, value);
+    }
+}
 function runImpl() {
     let vars = dotenv.parse(fs.readFileSync(inputs_1.default.envFile));
     if (inputs_1.default.expand || inputs_1.default.expandWithJobEnv) {
         // @ts-ignore
         vars = dotenvExpand.expand({ parsed: vars, ignoreProcessEnv: !inputs_1.default.expandWithJobEnv }).parsed;
     }
-    const applyResultFunc = inputs_1.default.export
-        ? core.exportVariable
-        : core.setOutput;
-    Object.entries(vars).forEach(e => applyResultFunc(e[0], e[1]));
+    Object.entries(vars).forEach(e => processValue(e[0], e[1]));
 }
 exports.runImpl = runImpl;
 //# sourceMappingURL=main.js.map

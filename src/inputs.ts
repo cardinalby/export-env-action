@@ -2,18 +2,22 @@ import * as core from '@actions/core';
 
 export default {
     get envFile(): string {
-        return core.getInput('envFile', {required: true});
+        return core.getInput('envFile', {required: true})
     },
 
     get expand(): boolean {
-        return core.getBooleanInput('expand');
+        return core.getBooleanInput('expand')
     },
 
     get expandWithJobEnv(): boolean {
-        return core.getBooleanInput('expandWithJobEnv');
+        return core.getBooleanInput('expandWithJobEnv')
     },
 
     get export(): boolean {
-        return core.getBooleanInput('export');
+        return core.getBooleanInput('export')
+    },
+
+    get mask(): boolean {
+        return core.getBooleanInput('mask')
     }
-};
+}

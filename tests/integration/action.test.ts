@@ -131,4 +131,30 @@ describe('export-env-action', () => {
         expect(Object.keys(res.commands.exportedVars).length).toEqual(0);
         expect(res.warnings).toHaveLength(0);
     });
+
+    it('should mask', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: path.join(__dirname, 'case1.env'),
+                export: 'true',
+                expand: 'true',
+                expandWithJobEnv: 'true',
+                mask: 'true'
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toEqual(true);
+        expect(res.commands.outputs.AAA).toBeUndefined();
+        expect(res.commands.outputs.BBB).toBeUndefined();
+        expect(res.commands.outputs.CCC).toBeUndefined();
+        expect(res.commands.exportedVars.AAA).toEqual('aaa#a');
+        expect(res.commands.exportedVars.BBB).toEqual('val-aaa#a-lav');
+        expect(res.commands.exportedVars.CCC).toEqual('abc');
+        expect(res.commands.secrets).toContain('aaa#a')
+        expect(res.commands.secrets).toContain('val-aaa#a-lav')
+        expect(res.commands.secrets).toContain('abc')
+        expect(res.warnings).toHaveLength(0);
+    });
 })

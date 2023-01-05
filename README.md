@@ -93,6 +93,12 @@ It means, `${GITHUB_RUN_ATTEMPT}` in a variable value will be substituted by the
 Export variables to a job environment. If `false`, all variables will be set as an action 
 outputs instead.
 
+### 🔹 `mask` Default: `false`
+If `true` [masks](https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#masking-a-value-in-log) all result values (after expanding) as secrets.
+
+**Warning**: be cautious if you want to use this option, it is bad idea to store secrets in 
+`.env` file in the repo, use [GitHub secrets](https://docs.github.com/en/codespaces/managing-codespaces-for-your-organization/managing-encrypted-secrets-for-your-repository-and-organization-for-github-codespaces) for that purpose.
+
 ## Outputs
 
 If `export` is `false` then there are individual outputs for each variable from env file (where output name equals variable name).
