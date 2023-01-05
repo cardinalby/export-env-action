@@ -83,6 +83,8 @@ VAR_2=${VAR_1}_bbb
 ```
 Will lead to following exported variables: `VAR1 = aaa`, `VAR2 = aaa_bbb`.
 
+Read more about expand engine rules [here](https://github.com/motdotla/dotenv-expand#what-rules-does-the-expansion-engine-follow).
+
 ### 🔹 `expandWithJobEnv` Default: `false`
 If `true`, "expands" variables considering step (job) env variables (in addition to variables defined in the same env file). 
 It means, `${GITHUB_RUN_ATTEMPT}` in a variable value will be substituted by the value of `$GITHUB_RUN_ATTEMPT` job env variable.
@@ -93,4 +95,4 @@ outputs instead.
 
 ## Outputs
 
-If `export` is `false` then has an individual output for each variable from env file (where output name equals variable name).
+If `export` is `false` then there are individual outputs for each variable from env file (where output name equals variable name).
