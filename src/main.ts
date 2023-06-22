@@ -8,7 +8,6 @@ function processValue(name: string, value: string) {
     if (inputs.mask) {
         core.setSecret(value)
     }
-
     if (inputs.export) {
         core.exportVariable(name, value)
     } else {
@@ -16,12 +15,30 @@ function processValue(name: string, value: string) {
     }
 }
 
-export function runImpl() {
-    let vars = dotenv.parse(fs.readFileSync(inputs.envFile))
-    if (inputs.expand || inputs.expandWithJobEnv) {
-        // @ts-ignore
-        vars = dotenvExpand.expand({parsed: vars, ignoreProcessEnv: !inputs.expandWithJobEnv}).parsed
-    }
+function readFile(name: string): dotenv.DotenvParseOutput {
+    return dotenv.parse(fs.readFileSync(name))
+}
 
-    Object.entries(vars).forEach(e => processValue(e[0], e[1]))
+function getVars(): dotenv.DotenvParseOutput {
+    const files = inputs.envFile.split(',')
+    return files.reduce((accum, file) => ({
+        ...accum,
+        ...readFile(file)
+    }), {})
+}
+
+export function runImpl() {
+    let vars = getVars()
+    if (inputs.expand || inputs.expandWithJobEnv) {
+        vars = dotenvExpand.expand({parsed: vars, ignoreProcessEnv: !inputs.expandWithJobEnv}).parsed as dotenv.DotenvParseOutput
+    }
+    
+    if (inputs.variables) {
+        const names = inputs.variables.split(',')
+        Object.entries(vars).forEach(([name, value]) => {
+            if (names.includes(name)) processValue(name, value)
+        })
+    } else {
+        Object.entries(vars).forEach(e => processValue(e[0], e[1]))
+    }
 }
