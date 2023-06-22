@@ -25,6 +25,52 @@ VAR2=def
 # env.VAR2 == 'def'
 ```
 
+### Multiple environment files:
+
+```dotenv
+# constants1.env file
+
+VAR1=abc
+VAR2=def
+```
+
+```dotenv
+# constants2.env file
+
+VAR2=ghi
+VAR3=jkl
+```
+
+```yaml
+- uses: cardinalby/export-env-action@v2
+  with:
+    envFile: 'constants1.env,constants2.env'
+  
+# env.VAR1 == 'abc'
+# env.VAR2 == 'ghi'
+# env.VAR3 == 'jkl'
+```
+
+### Specify variables:
+
+```dotenv
+# constants.env file
+
+VAR1=abc
+VAR2=def
+VAR3=ghi
+```
+
+```yaml
+- uses: cardinalby/export-env-action@v2
+  with:
+    envFile: 'constants.env'
+    variables: 'VAR1,VAR3'
+  
+# env.VAR1 == 'abc'
+# env.VAR3 == 'jkl'
+```
+
 ### Expand variables
 
 ```dotenv
