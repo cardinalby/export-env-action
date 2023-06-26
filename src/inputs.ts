@@ -9,6 +9,10 @@ export default {
         return core.getInput('variables')
     },
 
+    get separator(): string {
+        return core.getInput('separator')
+    },
+
     get expand(): boolean {
         return core.getBooleanInput('expand')
     },

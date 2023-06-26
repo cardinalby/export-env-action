@@ -161,9 +161,9 @@ describe('export-env-action', () => {
     it('should process multiple files', async () => {
         const res = await target.run(RunOptions.create({
             inputs: {
-                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join(','),
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
                 export: 'false',
-                variables: 'AAA,BBB',
+                variables: 'AAA|BBB',
             },
             env: {
                 JOBENV: 'abc'
@@ -176,6 +176,86 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.AAA).toBeUndefined();
         expect(res.commands.exportedVars.BBB).toBeUndefined();
         expect(res.commands.exportedVars.CCC).toBeUndefined();
+        expect(res.warnings).toHaveLength(0);
+    });
+
+    it('should process multiple files with custom separator', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join(';'),
+                export: 'false',
+                variables: 'AAA;BBB',
+                separator: ';',
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toEqual(true);
+        expect(res.commands.outputs.AAA).toEqual('ddd#d');
+        expect(res.commands.outputs.BBB).toEqual('val-${AAA}-lav');
+        expect(res.commands.outputs.CCC).toBeUndefined();
+        expect(res.commands.exportedVars.AAA).toBeUndefined();
+        expect(res.commands.exportedVars.BBB).toBeUndefined();
+        expect(res.commands.exportedVars.CCC).toBeUndefined();
+        expect(res.warnings).toHaveLength(0);
+    });
+
+    it('should process multiple files with custom separator, specific values, expand with output (no export)', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join(','),
+                variables: 'AAA,BBB,EEE',
+                separator: ',',
+                export: 'false',
+                expand: 'true',
+                expandWithJobEnv: 'true',
+                mask: 'true'
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toEqual(true);
+        expect(res.commands.outputs.AAA).toEqual('ddd#d');
+        expect(res.commands.outputs.BBB).toEqual('val-ddd#d-lav');
+        expect(res.commands.outputs.EEE).toEqual('val-111-expanded');
+        expect(res.commands.outputs.CCC).toBeUndefined();
+        expect(res.commands.outputs.DDD).toBeUndefined();
+        expect(res.commands.exportedVars.AAA).toBeUndefined();
+        expect(res.commands.exportedVars.BBB).toBeUndefined();
+        expect(res.commands.exportedVars.EEE).toBeUndefined();
+        expect(res.commands.exportedVars.CCC).toBeUndefined();
+        expect(res.commands.exportedVars.DDD).toBeUndefined();
+        expect(res.warnings).toHaveLength(0);
+    });
+
+    it('should process multiple files with custom separator, specific values, expand with export', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join(','),
+                variables: 'AAA,BBB,EEE',
+                separator: ',',
+                export: 'true',
+                expand: 'true',
+                expandWithJobEnv: 'true',
+                mask: 'true'
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toEqual(true);
+        expect(res.commands.outputs.AAA).toBeUndefined();
+        expect(res.commands.outputs.BBB).toBeUndefined();
+        expect(res.commands.outputs.EEE).toBeUndefined();
+        expect(res.commands.outputs.CCC).toBeUndefined();
+        expect(res.commands.outputs.DDD).toBeUndefined();
+        expect(res.commands.exportedVars.AAA).toEqual('ddd#d');
+        expect(res.commands.exportedVars.BBB).toEqual('val-ddd#d-lav');
+        expect(res.commands.exportedVars.EEE).toEqual('val-111-expanded');
+        expect(res.commands.exportedVars.CCC).toBeUndefined();
+        expect(res.commands.exportedVars.DDD).toBeUndefined();
         expect(res.warnings).toHaveLength(0);
     });
 })

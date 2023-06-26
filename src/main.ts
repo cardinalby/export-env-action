@@ -4,6 +4,8 @@ import * as dotenvExpand from "dotenv-expand";
 import inputs from "./inputs";
 import * as core from "@actions/core";
 
+const DEFAULT_SEPARATOR = '|'
+
 function processValue(name: string, value: string) {
     if (inputs.mask) {
         core.setSecret(value)
@@ -20,7 +22,8 @@ function readFile(name: string): dotenv.DotenvParseOutput {
 }
 
 function getVars(): dotenv.DotenvParseOutput {
-    const files = inputs.envFile.split(',')
+    const separator = inputs.separator || DEFAULT_SEPARATOR
+    const files = inputs.envFile.split(separator)
     return files.reduce((accum, file) => ({
         ...accum,
         ...readFile(file)
@@ -33,8 +36,9 @@ export function runImpl() {
         vars = dotenvExpand.expand({parsed: vars, ignoreProcessEnv: !inputs.expandWithJobEnv}).parsed as dotenv.DotenvParseOutput
     }
     
-    if (inputs.variables) {
-        const names = inputs.variables.split(',')
+    if (inputs.variables && inputs.variables.toLocaleLowerCase() !== 'all') {
+        const separator = inputs.separator || DEFAULT_SEPARATOR
+        const names = inputs.variables.split(separator)
         Object.entries(vars).forEach(([name, value]) => {
             if (names.includes(name)) processValue(name, value)
         })

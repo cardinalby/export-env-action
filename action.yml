@@ -3,8 +3,16 @@ description: 'Exports .env file variables to job env'
 author: 'cardinalby'
 inputs:
   envFile:
-    description: 'Path to .env file'
+    description: 'Path to .env file or Path to multiple .env files concatenated by `|` or custom "separator" prop'
     required: true
+  variables:
+    description: 'Variables to export or return concatenated by `|` or custom "separator" prop'
+    required: false
+    default: 'all'
+  separator:
+    description: 'Separator character used to concatenate multiple .env files or variables'
+    required: false
+    default: '|'
   expand:
     description: 'Substitute ${VAR} references by values of correspondent vars'
     required: false
