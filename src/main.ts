@@ -23,7 +23,6 @@ function readFile(name: string): dotenv.DotenvParseOutput {
 
 function getVars(): dotenv.DotenvParseOutput {
     const files = inputs.envFile.split(DEFAULT_SEPARATOR)
-    console.log("Files -> ", files);
     return files.reduce((accum, file) => ({
         ...accum,
         ...readFile(file)
