@@ -22,8 +22,7 @@ function readFile(name: string): dotenv.DotenvParseOutput {
 }
 
 function getVars(): dotenv.DotenvParseOutput {
-    const separator = inputs.separator || DEFAULT_SEPARATOR
-    const files = inputs.envFile.split(separator)
+    const files = inputs.envFile.split(DEFAULT_SEPARATOR)
     return files.reduce((accum, file) => ({
         ...accum,
         ...readFile(file)
@@ -37,8 +36,7 @@ export function runImpl() {
     }
     
     if (inputs.variables && inputs.variables.toLocaleLowerCase() !== 'all') {
-        const separator = inputs.separator || DEFAULT_SEPARATOR
-        const names = inputs.variables.split(separator)
+        const names = inputs.variables.split(DEFAULT_SEPARATOR)
         Object.entries(vars).forEach(([name, value]) => {
             if (names.includes(name)) processValue(name, value)
         })

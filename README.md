@@ -7,13 +7,11 @@
     1. [Simple case](#examples_simple_case)
     1. [Multiple environment files](#examples_multiple_environment)
     1. [Specify variables](#examples_specify_variables)
-    1. [Specify variables and environment files with custom separator](#examples_specify_variables_and_environment_with_separator)
     1. [Expand variables](#examples_expand_variables)
     1. [Do not export](#examples_do_not_export)
 1. [Inputs](#inputs)
     1. [envFile](#inputs_env_file)
     1. [variables](#inputs_variables)
-    1. [separator](#inputs_separator)
     1. [expand](#inputs_expand)
     1. [expandWithJobEnv](#inputs_expand_with_job_env)
     1. [export](#inputs_export)
@@ -102,35 +100,6 @@ VAR3=ghi
 # env.VAR3 == 'jkl'
 ```
 
-<a name="examples_specify_variables_and_environment_with_separator"></a>
-
-### Specify variables and environment files with custom separator:
-
-```dotenv
-# constants1.env file
-
-VAR1=abc
-VAR2=def
-```
-
-```dotenv
-# constants2.env file
-
-VAR2=ghi
-VAR3=jkl
-```
-
-```yaml
-- uses: cardinalby/export-env-action@v2
-  with:
-    envFile: 'constants1.env;constants2.env'
-    variables: 'VAR1;VAR3'
-    separator: ';'
-  
-# env.VAR1 == 'abc'
-# env.VAR3 == 'jkl'
-```
-
 <a name="examples_expand_variables"></a>
 
 ### Expand variables
@@ -192,7 +161,7 @@ Path to env file to parse.
 <a name="inputs_variables"></a>
 
 ### 🔹 `variables` Default: `all`
-Variables to export or return concatenated by `|` or custom "separator" prop. 
+Variables to export or return concatenated by `|`. 
 
 If variables: 'VAR_1|VAR_3'
 ```dotenv
@@ -201,31 +170,6 @@ VAR_2=bbb
 VAR_3=ccc
 ```
 Will lead to following exported variables: `VAR_1 = aaa`, `VAR3 = ccc`.
-
-<a name="inputs_separator"></a>
-
-### 🔹 `separator` Default: `|`
-Separator character used to concatenate multiple .env files or variables
-
-If config file is
-```yml
-variables: 'VAR_1,VAR_3'
-envFile: '.env1,.env2'
-separator: ','
-```
-
-and `.env1` is:
-```dotenv
-VAR_1=aaa
-VAR_2=bbb
-VAR_3=ccc
-```
-
-and `.env2` is:
-```dotenv
-VAR_3=111
-```
-Will lead to following exported variables: `VAR_1 = aaa`, `VAR3 = 111`.
 
 <a name="inputs_expand"></a>
 
