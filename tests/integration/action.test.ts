@@ -179,34 +179,11 @@ describe('export-env-action', () => {
         expect(res.warnings).toHaveLength(0);
     });
 
-    it('should process multiple files with custom separator', async () => {
+    it('should process multiple files with specific values, expand with output (no export)', async () => {
         const res = await target.run(RunOptions.create({
             inputs: {
-                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join(';'),
-                export: 'false',
-                variables: 'AAA;BBB',
-                separator: ';',
-            },
-            env: {
-                JOBENV: 'abc'
-            }
-        }));
-        expect(res.isSuccess).toEqual(true);
-        expect(res.commands.outputs.AAA).toEqual('ddd#d');
-        expect(res.commands.outputs.BBB).toEqual('val-${AAA}-lav');
-        expect(res.commands.outputs.CCC).toBeUndefined();
-        expect(res.commands.exportedVars.AAA).toBeUndefined();
-        expect(res.commands.exportedVars.BBB).toBeUndefined();
-        expect(res.commands.exportedVars.CCC).toBeUndefined();
-        expect(res.warnings).toHaveLength(0);
-    });
-
-    it('should process multiple files with custom separator, specific values, expand with output (no export)', async () => {
-        const res = await target.run(RunOptions.create({
-            inputs: {
-                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join(','),
-                variables: 'AAA,BBB,EEE',
-                separator: ',',
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
+                variables: 'AAA|BBB|EEE',
                 export: 'false',
                 expand: 'true',
                 expandWithJobEnv: 'true',
@@ -230,12 +207,11 @@ describe('export-env-action', () => {
         expect(res.warnings).toHaveLength(0);
     });
 
-    it('should process multiple files with custom separator, specific values, expand with export', async () => {
+    it('should process multiple files with specific values, expand with export', async () => {
         const res = await target.run(RunOptions.create({
             inputs: {
-                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join(','),
-                variables: 'AAA,BBB,EEE',
-                separator: ',',
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
+                variables: 'AAA|BBB|EEE',
                 export: 'true',
                 expand: 'true',
                 expandWithJobEnv: 'true',
