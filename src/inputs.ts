@@ -5,8 +5,8 @@ export default {
         return core.getInput('envFile', {required: true})
     },
 
-    get variables(): string {
-        return core.getInput('variables')
+    get filter(): string {
+        return core.getInput('filter')
     },
 
     get expand(): boolean {

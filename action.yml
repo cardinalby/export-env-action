@@ -5,10 +5,9 @@ inputs:
   envFile:
     description: 'Path to .env file or Path to multiple .env files concatenated by `|`'
     required: true
-  variables:
-    description: 'Variables to export or return concatenated by `|`'
+  filter:
+    description: 'Filter regexp to only export specific variables matching the filter'
     required: false
-    default: 'all'
   expand:
     description: 'Substitute ${VAR} references by values of correspondent vars'
     required: false

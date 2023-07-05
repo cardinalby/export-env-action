@@ -35,10 +35,10 @@ export function runImpl() {
         vars = dotenvExpand.expand({parsed: vars, ignoreProcessEnv: !inputs.expandWithJobEnv}).parsed as dotenv.DotenvParseOutput
     }
     
-    if (inputs.variables && inputs.variables.toLocaleLowerCase() !== 'all') {
-        const names = inputs.variables.split(DEFAULT_SEPARATOR)
+    if (inputs.filter) {
+        const criteria = new RegExp(inputs.filter)
         Object.entries(vars).forEach(([name, value]) => {
-            if (names.includes(name)) processValue(name, value)
+            if (criteria.test(name)) processValue(name, value)
         })
     } else {
         Object.entries(vars).forEach(e => processValue(e[0], e[1]))

@@ -6,12 +6,12 @@
 1. [Examples](#examples)
     1. [Simple case](#examples_simple_case)
     1. [Multiple environment files](#examples_multiple_environment)
-    1. [Specify variables](#examples_specify_variables)
+    1. [Specify variables filter](#examples_specify_variables_filter)
     1. [Expand variables](#examples_expand_variables)
     1. [Do not export](#examples_do_not_export)
 1. [Inputs](#inputs)
     1. [envFile](#inputs_env_file)
-    1. [variables](#inputs_variables)
+    1. [filter](#inputs_filter)
     1. [expand](#inputs_expand)
     1. [expandWithJobEnv](#inputs_expand_with_job_env)
     1. [export](#inputs_export)
@@ -78,9 +78,9 @@ VAR3=jkl
 # env.VAR3 == 'jkl'
 ```
 
-<a name="examples_specify_variables"></a>
+<a name="examples_specify_variables_filter"></a>
 
-### Specify variables:
+### Specify variables filter:
 
 ```dotenv
 # constants.env file
@@ -94,7 +94,7 @@ VAR3=ghi
 - uses: cardinalby/export-env-action@v2
   with:
     envFile: 'constants.env'
-    variables: 'VAR1|VAR3'
+    filter: 'VAR1|VAR3'
   
 # env.VAR1 == 'abc'
 # env.VAR3 == 'jkl'
@@ -158,12 +158,12 @@ VAR2=def
 ### 🔸 `envFile` Required
 Path to env file to parse. 
 
-<a name="inputs_variables"></a>
+<a name="inputs_filter"></a>
 
-### 🔹 `variables` Default: `all`
-Variables to export or return concatenated by `|`. 
+### 🔹 `filter` Default: null
+Filter regexp to only export specific variables matching the filter. 
 
-If variables: 'VAR_1|VAR_3'
+If filter is: 'VAR_1|VAR_3'
 ```dotenv
 VAR_1=aaa
 VAR_2=bbb

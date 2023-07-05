@@ -163,7 +163,7 @@ describe('export-env-action', () => {
             inputs: {
                 envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
                 export: 'false',
-                variables: 'AAA|BBB',
+                filter: 'AAA|BBB',
             },
             env: {
                 JOBENV: 'abc'
@@ -183,7 +183,7 @@ describe('export-env-action', () => {
         const res = await target.run(RunOptions.create({
             inputs: {
                 envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
-                variables: 'AAA|BBB|EEE',
+                filter: 'AAA|BBB|EEE',
                 export: 'false',
                 expand: 'true',
                 expandWithJobEnv: 'true',
@@ -211,7 +211,7 @@ describe('export-env-action', () => {
         const res = await target.run(RunOptions.create({
             inputs: {
                 envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
-                variables: 'AAA|BBB|EEE',
+                filter: 'AAA|BBB|EEE',
                 export: 'true',
                 expand: 'true',
                 expandWithJobEnv: 'true',

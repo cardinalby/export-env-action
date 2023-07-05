@@ -91,8 +91,8 @@ exports["default"] = {
     get envFile() {
         return core.getInput('envFile', { required: true });
     },
-    get variables() {
-        return core.getInput('variables');
+    get filter() {
+        return core.getInput('filter');
     },
     get expand() {
         return core.getBooleanInput('expand');
@@ -166,8 +166,6 @@ function readFile(name) {
 }
 function getVars() {
     const files = inputs_1.default.envFile.split(DEFAULT_SEPARATOR);
-    console.debug("Files -> ", files);
-    core.debug(`Files -> ${files.length} - files`);
     return files.reduce((accum, file) => (Object.assign(Object.assign({}, accum), readFile(file))), {});
 }
 function runImpl() {
@@ -175,10 +173,10 @@ function runImpl() {
     if (inputs_1.default.expand || inputs_1.default.expandWithJobEnv) {
         vars = dotenvExpand.expand({ parsed: vars, ignoreProcessEnv: !inputs_1.default.expandWithJobEnv }).parsed;
     }
-    if (inputs_1.default.variables && inputs_1.default.variables.toLocaleLowerCase() !== 'all') {
-        const names = inputs_1.default.variables.split(DEFAULT_SEPARATOR);
+    if (inputs_1.default.filter) {
+        const criteria = new RegExp(inputs_1.default.filter);
         Object.entries(vars).forEach(([name, value]) => {
-            if (names.includes(name))
+            if (criteria.test(name))
                 processValue(name, value);
         });
     }
