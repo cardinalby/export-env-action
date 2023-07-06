@@ -234,4 +234,23 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.DDD).toBeUndefined();
         expect(res.warnings).toHaveLength(0);
     });
+
+    it('should fail is filter regular expression is invalid', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
+                filter: '***null',
+                export: 'true',
+                expand: 'true',
+                expandWithJobEnv: 'true',
+                mask: 'true'
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toBeFalsy();
+        expect(res.commands.errors[0]).toEqual('Error: Invalid filter regex');
+        expect(res.stdout).toEqual('::error::Error: Invalid filter regex\n');
+    });
 })

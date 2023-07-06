@@ -29,6 +29,14 @@ function getVars(): dotenv.DotenvParseOutput {
     }), {})
 }
 
+function getFilter(): RegExp {
+    try {
+        return new RegExp(inputs.filter)
+    } catch (err) {
+        throw new Error("Invalid filter regex")
+    }
+}
+
 export function runImpl() {
     let vars = getVars()
     if (inputs.expand || inputs.expandWithJobEnv) {
@@ -36,7 +44,7 @@ export function runImpl() {
     }
     
     if (inputs.filter) {
-        const criteria = new RegExp(inputs.filter)
+        const criteria = getFilter()
         Object.entries(vars).forEach(([name, value]) => {
             if (criteria.test(name)) processValue(name, value)
         })

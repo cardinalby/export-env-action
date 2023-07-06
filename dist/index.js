@@ -168,13 +168,21 @@ function getVars() {
     const files = inputs_1.default.envFile.split(DEFAULT_SEPARATOR);
     return files.reduce((accum, file) => (Object.assign(Object.assign({}, accum), readFile(file))), {});
 }
+function getFilter() {
+    try {
+        return new RegExp(inputs_1.default.filter);
+    }
+    catch (err) {
+        throw new Error("Invalid filter regex");
+    }
+}
 function runImpl() {
     let vars = getVars();
     if (inputs_1.default.expand || inputs_1.default.expandWithJobEnv) {
         vars = dotenvExpand.expand({ parsed: vars, ignoreProcessEnv: !inputs_1.default.expandWithJobEnv }).parsed;
     }
     if (inputs_1.default.filter) {
-        const criteria = new RegExp(inputs_1.default.filter);
+        const criteria = getFilter();
         Object.entries(vars).forEach(([name, value]) => {
             if (criteria.test(name))
                 processValue(name, value);

@@ -163,6 +163,8 @@ Path to env file to parse.
 ### 🔹 `filter` Default: null
 Filter regexp to only export specific variables matching the filter. 
 
+It *filters* both <ins>exported variables</ins> and <ins>action outputs</ins> (if `export: false`), but doesn't impacts variables extending and masking.
+
 If filter is: 'VAR_1|VAR_3'
 ```dotenv
 VAR_1=aaa
