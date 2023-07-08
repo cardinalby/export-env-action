@@ -91,6 +91,9 @@ exports["default"] = {
     get envFile() {
         return core.getInput('envFile', { required: true });
     },
+    get filter() {
+        return core.getInput('filter');
+    },
     get expand() {
         return core.getBooleanInput('expand');
     },
@@ -146,6 +149,7 @@ const dotenv = __importStar(__nccwpck_require__(437));
 const dotenvExpand = __importStar(__nccwpck_require__(967));
 const inputs_1 = __importDefault(__nccwpck_require__(180));
 const core = __importStar(__nccwpck_require__(186));
+const DEFAULT_SEPARATOR = '|';
 function processValue(name, value) {
     if (inputs_1.default.mask) {
         core.setSecret(value);
@@ -157,13 +161,36 @@ function processValue(name, value) {
         core.setOutput(name, value);
     }
 }
+function readFile(name) {
+    return dotenv.parse(fs.readFileSync(name));
+}
+function getVars() {
+    const files = inputs_1.default.envFile.split(DEFAULT_SEPARATOR);
+    return files.reduce((accum, file) => (Object.assign(Object.assign({}, accum), readFile(file))), {});
+}
+function getFilter() {
+    try {
+        return new RegExp(inputs_1.default.filter);
+    }
+    catch (err) {
+        throw new Error("Invalid filter regex");
+    }
+}
 function runImpl() {
-    let vars = dotenv.parse(fs.readFileSync(inputs_1.default.envFile));
+    let vars = getVars();
     if (inputs_1.default.expand || inputs_1.default.expandWithJobEnv) {
-        // @ts-ignore
         vars = dotenvExpand.expand({ parsed: vars, ignoreProcessEnv: !inputs_1.default.expandWithJobEnv }).parsed;
     }
-    Object.entries(vars).forEach(e => processValue(e[0], e[1]));
+    if (inputs_1.default.filter) {
+        const criteria = getFilter();
+        Object.entries(vars).forEach(([name, value]) => {
+            if (criteria.test(name))
+                processValue(name, value);
+        });
+    }
+    else {
+        Object.entries(vars).forEach(e => processValue(e[0], e[1]));
+    }
 }
 exports.runImpl = runImpl;
 //# sourceMappingURL=main.js.map

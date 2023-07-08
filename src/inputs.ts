@@ -5,6 +5,10 @@ export default {
         return core.getInput('envFile', {required: true})
     },
 
+    get filter(): string {
+        return core.getInput('filter')
+    },
+
     get expand(): boolean {
         return core.getBooleanInput('expand')
     },

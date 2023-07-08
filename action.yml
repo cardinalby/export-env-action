@@ -3,8 +3,11 @@ description: 'Exports .env file variables to job env'
 author: 'cardinalby'
 inputs:
   envFile:
-    description: 'Path to .env file'
+    description: 'Path to .env file or Path to multiple .env files concatenated by `|`'
     required: true
+  filter:
+    description: 'Filter regexp to only export specific variables matching the filter'
+    required: false
   expand:
     description: 'Substitute ${VAR} references by values of correspondent vars'
     required: false

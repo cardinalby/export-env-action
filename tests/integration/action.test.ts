@@ -157,4 +157,100 @@ describe('export-env-action', () => {
         expect(res.commands.secrets).toContain('abc')
         expect(res.warnings).toHaveLength(0);
     });
+
+    it('should process multiple files', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
+                export: 'false',
+                filter: 'AAA|BBB',
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toEqual(true);
+        expect(res.commands.outputs.AAA).toEqual('ddd#d');
+        expect(res.commands.outputs.BBB).toEqual('val-${AAA}-lav');
+        expect(res.commands.outputs.CCC).toBeUndefined();
+        expect(res.commands.exportedVars.AAA).toBeUndefined();
+        expect(res.commands.exportedVars.BBB).toBeUndefined();
+        expect(res.commands.exportedVars.CCC).toBeUndefined();
+        expect(res.warnings).toHaveLength(0);
+    });
+
+    it('should process multiple files with specific values, expand with output (no export)', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
+                filter: 'AAA|BBB|EEE',
+                export: 'false',
+                expand: 'true',
+                expandWithJobEnv: 'true',
+                mask: 'true'
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toEqual(true);
+        expect(res.commands.outputs.AAA).toEqual('ddd#d');
+        expect(res.commands.outputs.BBB).toEqual('val-ddd#d-lav');
+        expect(res.commands.outputs.EEE).toEqual('val-111-expanded');
+        expect(res.commands.outputs.CCC).toBeUndefined();
+        expect(res.commands.outputs.DDD).toBeUndefined();
+        expect(res.commands.exportedVars.AAA).toBeUndefined();
+        expect(res.commands.exportedVars.BBB).toBeUndefined();
+        expect(res.commands.exportedVars.EEE).toBeUndefined();
+        expect(res.commands.exportedVars.CCC).toBeUndefined();
+        expect(res.commands.exportedVars.DDD).toBeUndefined();
+        expect(res.warnings).toHaveLength(0);
+    });
+
+    it('should process multiple files with specific values, expand with export', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
+                filter: 'AAA|BBB|EEE',
+                export: 'true',
+                expand: 'true',
+                expandWithJobEnv: 'true',
+                mask: 'true'
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toEqual(true);
+        expect(res.commands.outputs.AAA).toBeUndefined();
+        expect(res.commands.outputs.BBB).toBeUndefined();
+        expect(res.commands.outputs.EEE).toBeUndefined();
+        expect(res.commands.outputs.CCC).toBeUndefined();
+        expect(res.commands.outputs.DDD).toBeUndefined();
+        expect(res.commands.exportedVars.AAA).toEqual('ddd#d');
+        expect(res.commands.exportedVars.BBB).toEqual('val-ddd#d-lav');
+        expect(res.commands.exportedVars.EEE).toEqual('val-111-expanded');
+        expect(res.commands.exportedVars.CCC).toBeUndefined();
+        expect(res.commands.exportedVars.DDD).toBeUndefined();
+        expect(res.warnings).toHaveLength(0);
+    });
+
+    it('should fail is filter regular expression is invalid', async () => {
+        const res = await target.run(RunOptions.create({
+            inputs: {
+                envFile: [path.join(__dirname, 'case1.env'), path.join(__dirname, 'case2.env')].join('|'),
+                filter: '***null',
+                export: 'true',
+                expand: 'true',
+                expandWithJobEnv: 'true',
+                mask: 'true'
+            },
+            env: {
+                JOBENV: 'abc'
+            }
+        }));
+        expect(res.isSuccess).toBeFalsy();
+        expect(res.commands.errors[0]).toEqual('Error: Invalid filter regex');
+        expect(res.stdout).toEqual('::error::Error: Invalid filter regex\n');
+    });
 })
