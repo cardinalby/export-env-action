@@ -23,7 +23,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.AAA).toBeUndefined();
         expect(res.commands.exportedVars.BBB).toBeUndefined();
         expect(res.commands.exportedVars.CCC).toBeUndefined();
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should not export, expandWithJobEnv', async () => {
@@ -44,7 +44,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.AAA).toBeUndefined();
         expect(res.commands.exportedVars.BBB).toBeUndefined();
         expect(res.commands.exportedVars.CCC).toBeUndefined();
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should not expand', async () => {
@@ -64,7 +64,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.AAA).toEqual('aaa#a');
         expect(res.commands.exportedVars.BBB).toEqual('val-${AAA}-lav');
         expect(res.commands.exportedVars.CCC).toEqual('${JOBENV}');
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should fail if file does not exist', async () => {
@@ -95,7 +95,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.AAA).toBeUndefined();
         expect(res.commands.exportedVars.BBB).toBeUndefined();
         expect(res.commands.exportedVars.CCC).toBeUndefined();
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should expand and export', async () => {
@@ -117,7 +117,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.AAA).toEqual('aaa#a');
         expect(res.commands.exportedVars.BBB).toEqual('val-aaa#a-lav');
         expect(res.commands.exportedVars.CCC).toEqual('abc');
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should not parse json', async () => {
@@ -129,7 +129,7 @@ describe('export-env-action', () => {
         expect(res.isSuccess).toEqual(true);
         expect(Object.keys(res.commands.outputs).length).toEqual(0);
         expect(Object.keys(res.commands.exportedVars).length).toEqual(0);
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should mask', async () => {
@@ -155,7 +155,7 @@ describe('export-env-action', () => {
         expect(res.commands.secrets).toContain('aaa#a')
         expect(res.commands.secrets).toContain('val-aaa#a-lav')
         expect(res.commands.secrets).toContain('abc')
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should process multiple files', async () => {
@@ -176,7 +176,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.AAA).toBeUndefined();
         expect(res.commands.exportedVars.BBB).toBeUndefined();
         expect(res.commands.exportedVars.CCC).toBeUndefined();
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should process multiple files with specific values, expand with output (no export)', async () => {
@@ -204,7 +204,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.EEE).toBeUndefined();
         expect(res.commands.exportedVars.CCC).toBeUndefined();
         expect(res.commands.exportedVars.DDD).toBeUndefined();
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should process multiple files with specific values, expand with export', async () => {
@@ -232,7 +232,7 @@ describe('export-env-action', () => {
         expect(res.commands.exportedVars.EEE).toEqual('val-111-expanded');
         expect(res.commands.exportedVars.CCC).toBeUndefined();
         expect(res.commands.exportedVars.DDD).toBeUndefined();
-        expect(res.warnings).toHaveLength(0);
+        expect(res.runnerWarnings).toHaveLength(0);
     });
 
     it('should fail is filter regular expression is invalid', async () => {
