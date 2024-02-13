@@ -1,1 +1,4 @@
 **/*.js
+/integration/lib/action.test.d.ts
+/integration/lib/action.test.d.ts.map
+/integration/lib/action.test.js.map
